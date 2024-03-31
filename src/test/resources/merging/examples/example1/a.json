@@ -1,0 +1,10 @@
+{
+  "person": {
+    "name": "John",
+    "age": 30
+  },
+  "address": {
+    "city": "New York",
+    "zipcode": "10001"
+  }
+}
