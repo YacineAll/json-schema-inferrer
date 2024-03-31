@@ -30,8 +30,6 @@ object JsonSchemaType extends JsonSchemaType {
       case number: JNumber => NumberType
       case JNothing => NullType
       case JString(s) => StringType
-      case JDouble(_) => NumberType
-
 
 }
 
