@@ -1,4 +1,4 @@
-package org.example.merging
+package org.jsonschematools.merging
 
 import org.json4s.*
 import org.scalatest.funsuite.AnyFunSuite

@@ -1,4 +1,4 @@
-package org.example.schema.types
+package org.jsonschematools.schema.types
 
 abstract class NullType extends JsonSchemaType
 

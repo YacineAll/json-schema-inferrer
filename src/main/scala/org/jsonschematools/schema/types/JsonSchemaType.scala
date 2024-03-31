@@ -1,6 +1,6 @@
-package org.example.schema.types
+package org.jsonschematools.schema.types
 
-import org.example.schema.*
+import org.jsonschematools.schema.*
 import org.json4s.{JArray, JBool, JDecimal, JDouble, JInt, JLong, JNothing, JNull, JNumber, JObject, JSet, JString, JValue}
 
 abstract class JsonSchemaType {

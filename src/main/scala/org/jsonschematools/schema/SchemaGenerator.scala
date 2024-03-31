@@ -1,6 +1,6 @@
-package org.example.schema
+package org.jsonschematools.schema
 
-import org.example.schema.types.{ArrayType, JsonSchemaType, ObjectType}
+import org.jsonschematools.schema.types.{ArrayType, JsonSchemaType, ObjectType}
 
 import org.json4s.*
 import org.json4s.jackson.JsonMethods.*

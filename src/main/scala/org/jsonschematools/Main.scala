@@ -1,6 +1,6 @@
-package org.example
+package org.jsonschematools
 
-import org.example.schema.SchemaGenerator
+import org.jsonschematools.schema.SchemaGenerator
 import org.json4s.*
 import org.json4s.native.JsonMethods.*
 

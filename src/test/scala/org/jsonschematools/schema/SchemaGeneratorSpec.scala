@@ -1,4 +1,4 @@
-package org.example.schema
+package org.jsonschematools.schema
 
 import org.json4s._
 import org.json4s.native.JsonMethods._
@@ -27,18 +27,18 @@ class SchemaGeneratorSpec extends AnyFunSuite with TableDrivenPropertyChecks {
 
   // Parameterized test for generating schema for all examples
   test("SchemaGenerator should generate correct schema for all examples") {
-    // Table-driven property check to iterate over all example files
+    // Table-driven property check to iterate over all jsonschematools files
     val testData = Table("fileName", files*)
 
     forAll(testData) { fileName =>
       val examplePath = examplesDir.resolve(fileName)
       val expectedPath = expectedDir.resolve(fileName)
 
-      // Read example JSON and expected JSON from files
+      // Read jsonschematools JSON and expected JSON from files
       val exampleJson: String = Files.readString(examplePath)
       val expectedJson: String = Files.readString(expectedPath)
 
-      // Generate schema from example JSON and parse expected schema from expected JSON
+      // Generate schema from jsonschematools JSON and parse expected schema from expected JSON
       val generatedSchema = SchemaGenerator(exampleJson)
       val expectedSchema = parse(expectedJson)
 
