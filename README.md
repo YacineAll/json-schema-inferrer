@@ -12,20 +12,4 @@ Scala library for automating JSON Schema generation from data and merging schema
 
 - Infer JSON Schema from JSON data
 - Merge multiple JSON Schemas into a single comprehensive schema
-- Customize schema generation with user-defined options
-- Support for both JSON Schema Draft 4 and Draft 7
-
-## Getting Started
-
-### Prerequisites
-
-- Scala 2.13 or later
-- sbt 1.x or later
-
-### Installation
-
-To use the json-schema-inferrer library in your Scala project, add the following dependency to your `build.sbt` file:
-
-```scss
-libraryDependencies += "com.github.yacineall" %% "json-schema-inferrer" % "0.1.0"
 
