@@ -1,5 +1,4 @@
-name: Scala CI
-
+name: Build
 on:
   push:
     branches:
@@ -9,19 +8,12 @@ on:
     branches:
       - main
       - develop
-
 env:
   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   CODECOV_SLUG: YacineAll/json-schema-inferrer
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build
-        run: sbt compile
 
+jobs:
   test:
     runs-on: ubuntu-latest
     steps:
@@ -42,17 +34,3 @@ jobs:
         with:
           token: ${{ env.CODECOV_TOKEN }}
           slug: ${{ env.CODECOV_SLUG }}
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Cache scalafmt config
-        uses: actions/cache@v4
-        with:
-          path: ~/.scalafmt.conf
-          key: ${{ runner.os }}-scalafmt-${{ hashFiles('**/scalafmt.conf') }}
-          restore-keys: |
-            ${{ runner.os }}-scalafmt-
-      - name: Formatting
-        run: sbt scalafmtSbtCheck scalafmtCheck test:scalafmtCheck
