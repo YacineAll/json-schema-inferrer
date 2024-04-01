@@ -1,7 +1,6 @@
 package org.jsonschematools.merging
 
-import org.json4s._
-import org.json4s.JNothing
+import org.json4s.*
 
 import scala.annotation.tailrec
 

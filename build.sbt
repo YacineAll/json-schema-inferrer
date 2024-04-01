@@ -10,7 +10,6 @@ lazy val root = (project in file("."))
       "org.json4s" %% "json4s-native" % "4.1.0-M5",
       // Testing dependencies
       "org.scalatest" %% "scalatest" % "3.2.17" % Test,
-      "com.typesafe.akka" %% "akka-testkit" % "2.8.5" % Test // Example of another test dependency
     ),
     // ScalaTest configuration
     testFrameworks += new TestFramework("org.scalatestplus.junit.JUnitRunner"),
