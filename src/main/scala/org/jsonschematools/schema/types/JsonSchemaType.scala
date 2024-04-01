@@ -19,7 +19,6 @@ abstract class JsonSchemaType {
    * @return
    *   the JSON type as a string
    */
-  @Override
   override def toString: String = jsonType.getOrElse("")
 }
 
