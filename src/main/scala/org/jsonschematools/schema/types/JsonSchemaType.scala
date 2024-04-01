@@ -1,7 +1,7 @@
 package org.jsonschematools.schema.types
 
-import org.jsonschematools.schema.*
 import org.json4s.{JArray, JBool, JDecimal, JDouble, JInt, JLong, JNothing, JNull, JNumber, JObject, JSet, JString, JValue}
+import org.jsonschematools.schema.*
 
 abstract class JsonSchemaType {
   protected val jsonType: Option[String]

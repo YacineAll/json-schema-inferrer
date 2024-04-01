@@ -1,8 +1,8 @@
 package org.jsonschematools
 
-import org.jsonschematools.schema.SchemaGenerator
 import org.json4s.*
 import org.json4s.native.JsonMethods.*
+import org.jsonschematools.schema.SchemaGenerator
 
 import scala.io.Source
 
