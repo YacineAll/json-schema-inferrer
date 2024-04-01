@@ -1,0 +1,16 @@
+{
+  "person": [
+    {
+      "name": "Bob",
+      "age": 40
+    },
+    {
+      "name": "Alice",
+      "age": 25
+    }
+  ],
+  "skills": [
+    "Java",
+    "Scala"
+  ]
+}
