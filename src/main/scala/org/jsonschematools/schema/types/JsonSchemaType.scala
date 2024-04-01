@@ -16,7 +16,6 @@ object JsonSchemaType extends JsonSchemaType {
   var required: Boolean = false
   val jsonType: Option[String] = None
 
-
   def getSchemaTypeFor(element: JValue): JsonSchemaType =
     element match
       case JSet(set) => ArrayType
@@ -32,7 +31,3 @@ object JsonSchemaType extends JsonSchemaType {
       case JString(s) => StringType
 
 }
-
-
-
-

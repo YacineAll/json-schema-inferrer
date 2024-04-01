@@ -19,9 +19,10 @@ class SchemaGeneratorSpec extends AnyFunSuite with TableDrivenPropertyChecks {
     val json = "{}"
     val schema = SchemaGenerator(json)
     val expected = JObject(
-      List(("$schema", JString("http://json-schema.org/draft-04/schema#")), ("type", JString("object")),
-        ("properties", JObject(List())))
-    )
+      List(
+        ("$schema", JString("http://json-schema.org/draft-04/schema#")),
+        ("type", JString("object")),
+        ("properties", JObject(List()))))
     assert(schema === expected)
   }
 

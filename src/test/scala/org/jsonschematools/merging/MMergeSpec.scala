@@ -11,14 +11,16 @@ class MMergeSpec extends AnyFunSuite {
   val examplesDirectory: String = "/merging/examples"
   val expectedDirectory: String = "/merging/expected"
 
-
   test("Merge two JObject instances") {
     val json1 = JObject("name" -> JString("John"), "age" -> JInt(30))
     val json2 = JObject("name" -> JString("Alice"), "city" -> JString("New York"))
 
     val merged = MMerge.merge(json1, json2)
 
-    val expected = JObject("name" -> JArray(List(JString("John"), JString("Alice"))), "age" -> JInt(30), "city" -> JString("New York"))
+    val expected = JObject(
+      "name" -> JArray(List(JString("John"), JString("Alice"))),
+      "age" -> JInt(30),
+      "city" -> JString("New York"))
     assert(merged === expected)
   }
 
@@ -36,7 +38,11 @@ class MMergeSpec extends AnyFunSuite {
     val json1 = JObject("name" -> JString("John"), "age" -> JInt(30))
     val json2 = JArray(List(JString("Alice"), JString("New York")))
     val merged = MMerge.merge(json1, json2)
-    val expected = JArray(List(JObject("name" -> JString("John"), "age" -> JInt(30)), JString("Alice"), JString("New York")))
+    val expected = JArray(
+      List(
+        JObject("name" -> JString("John"), "age" -> JInt(30)),
+        JString("Alice"),
+        JString("New York")))
     assert(merged === expected)
   }
 
@@ -46,7 +52,11 @@ class MMergeSpec extends AnyFunSuite {
 
     val merged = MMerge.merge(json1, json2)
 
-    val expected = JArray(List(JString("Alice"), JString("New York"), JObject("name" -> JString("John"), "age" -> JInt(30))))
+    val expected = JArray(
+      List(
+        JString("Alice"),
+        JString("New York"),
+        JObject("name" -> JString("John"), "age" -> JInt(30))))
     assert(merged === expected)
   }
 
@@ -64,7 +74,8 @@ class MMergeSpec extends AnyFunSuite {
     val json1 = JString("John")
     val json2 = JObject("name" -> JString("Alice"), "age" -> JInt(30))
     val merged = MMerge.merge(json1, json2)
-    val expected = JArray(List(JString("John"), JObject("name" -> JString("Alice"), "age" -> JInt(30))))
+    val expected =
+      JArray(List(JString("John"), JObject("name" -> JString("Alice"), "age" -> JInt(30))))
     assert(merged === expected)
   }
 
@@ -99,45 +110,90 @@ class MMergeSpec extends AnyFunSuite {
   }
 
   test("Merge complex JObject instances with nested structures") {
-    val a = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example1/a.json")).mkString)
-    val b = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example1/b.json")).mkString)
-    val expected = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$expectedDirectory/example1.json")).mkString)
+    val a = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example1/a.json"))
+        .mkString)
+    val b = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example1/b.json"))
+        .mkString)
+    val expected = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$expectedDirectory/example1.json"))
+        .mkString)
     val merged = MMerge.merge(a, b)
 
     assert(merged === expected)
   }
 
   test("Merge complex JArray instances with nested structures") {
-    val a = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example2/a.json")).mkString)
-    val b = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example2/b.json")).mkString)
-    val expected = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$expectedDirectory/example2.json")).mkString)
+    val a = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example2/a.json"))
+        .mkString)
+    val b = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example2/b.json"))
+        .mkString)
+    val expected = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$expectedDirectory/example2.json"))
+        .mkString)
     val merged = MMerge.merge(a, b)
 
     assert(merged === expected)
   }
 
   test("Merge complex JObject with JArray instances") {
-    val a = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example3/a.json")).mkString)
-    val b = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example3/b.json")).mkString)
-    val expected = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$expectedDirectory/example3.json")).mkString)
+    val a = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example3/a.json"))
+        .mkString)
+    val b = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example3/b.json"))
+        .mkString)
+    val expected = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$expectedDirectory/example3.json"))
+        .mkString)
     val merged = MMerge.merge(a, b)
 
     assert(merged === expected)
   }
 
   test("Merge complex JArray with JObject instances") {
-    val a = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example4/a.json")).mkString)
-    val b = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example4/b.json")).mkString)
-    val expected = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$expectedDirectory/example4.json")).mkString)
+    val a = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example4/a.json"))
+        .mkString)
+    val b = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example4/b.json"))
+        .mkString)
+    val expected = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$expectedDirectory/example4.json"))
+        .mkString)
     val merged = MMerge.merge(a, b)
 
     assert(merged === expected)
   }
 
   test("Merge complex JArray with JArray instances") {
-    val a = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example5/a.json")).mkString)
-    val b = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example5/b.json")).mkString)
-    val expected = parse(Source.fromInputStream(getClass.getResourceAsStream(s"$expectedDirectory/example5.json")).mkString)
+    val a = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example5/a.json"))
+        .mkString)
+    val b = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$examplesDirectory/example5/b.json"))
+        .mkString)
+    val expected = parse(
+      Source
+        .fromInputStream(getClass.getResourceAsStream(s"$expectedDirectory/example5.json"))
+        .mkString)
     val merged = MMerge.merge(a, b)
 
     assert(merged === expected)
