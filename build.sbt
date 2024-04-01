@@ -14,6 +14,9 @@ lazy val root = (project in file("."))
     ),
     // ScalaTest configuration
     testFrameworks += new TestFramework("org.scalatestplus.junit.JUnitRunner"),
-    testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD"), // Output detailed test results
+    testOptions += Tests.Argument(
+      TestFrameworks.ScalaTest,
+      "-oD"
+    ), // Output detailed test results
     Test / parallelExecution := false // Disable parallel execution for testing
   )
