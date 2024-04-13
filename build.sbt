@@ -35,7 +35,6 @@ ThisBuild / pomIncludeRepository := { _ => false }
 
 ThisBuild / versionScheme := Some("early-semver")
 
-
 lazy val root = (project in file("."))
   .settings(
     name := "json-schema-inferrer",
@@ -50,11 +49,5 @@ lazy val root = (project in file("."))
       TestFrameworks.ScalaTest,
       "-oD"
     ), // Output detailed test results
-    Test / parallelExecution := false, // Disable parallel execution for testing
-    publishTo := {
-      // For accounts created after Feb 2021:
-      val nexus = "https://s01.oss.sonatype.org/"
-      if (isSnapshot.value) Some("snapshots" at nexus + "content/repositories/snapshots")
-      else Some("releases" at nexus + "service/local/staging/deploy/maven2")
-    },
-    publishMavenStyle := true)
+    Test / parallelExecution := false // Disable parallel execution for testing
+  )
