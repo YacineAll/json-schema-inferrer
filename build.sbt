@@ -45,6 +45,7 @@ ThisBuild / githubWorkflowJavaVersions := Seq(
   JavaSpec.temurin("17"),
   JavaSpec.temurin("20"))
 
+ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches := Seq(
   RefPredicate.StartsWith(Ref.Tag("v")),
   RefPredicate.Equals(Ref.Branch("main")))
