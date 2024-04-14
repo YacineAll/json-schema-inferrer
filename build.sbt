@@ -47,6 +47,18 @@ ThisBuild / githubWorkflowJavaVersions := Seq(
 ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.Equals(Ref.Branch("main")))
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 
+ThisBuild / githubWorkflowBuildPostamble ++= Seq(
+  WorkflowStep.Sbt(
+    List("${{ matrix.ci }}", "scalafmtSbtCheck", "scalafmtCheck", "test:scalafmtCheck"),
+    name = Some("Formatting")),
+  WorkflowStep.Sbt(List("${{ matrix.ci }}", "coverage", "test"), name = Some("Build tests")),
+  WorkflowStep.Sbt(List("${{ matrix.ci }}", "coverageReport"), name = Some("Coverage Report")),
+  WorkflowStep.Use(
+    ref = UseRef.Public("codecov", "codecov-action", "v4.0.1"),
+    name = Some("Upload coverage reports to Codecov"),
+    params =
+      Map("token" -> "${{ secrets.CODECOV_TOKEN }}", "slug" -> "YacineAll/json-schema-inferrer")))
+
 ThisBuild / githubWorkflowPublish := Seq(
   WorkflowStep.Sbt(
     commands = List("publish"),
