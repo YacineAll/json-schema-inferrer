@@ -40,11 +40,10 @@ lazy val root = (project in file("."))
     Test / parallelExecution := false // Disable parallel execution for testing
   )
 
-ThisBuild / githubWorkflowJavaVersions ++= Seq(
+ThisBuild / githubWorkflowJavaVersions := Seq(
   JavaSpec.temurin("11"),
   JavaSpec.temurin("17"),
-  JavaSpec.temurin("20")
-)
+  JavaSpec.temurin("20"))
 ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.Equals(Ref.Branch("main")))
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 
