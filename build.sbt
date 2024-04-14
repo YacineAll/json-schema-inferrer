@@ -45,7 +45,9 @@ ThisBuild / githubWorkflowJavaVersions := Seq(
   JavaSpec.temurin("17"),
   JavaSpec.temurin("20"))
 
-ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("v")))
+ThisBuild / githubWorkflowPublishTargetBranches := Seq(
+  RefPredicate.StartsWith(Ref.Tag("v")),
+  RefPredicate.Equals(Ref.Branch("main")))
 
 ThisBuild / githubWorkflowBuildPostamble ++= Seq(
   WorkflowStep.Sbt(
@@ -58,24 +60,8 @@ ThisBuild / githubWorkflowBuildPostamble ++= Seq(
     name = Some("Upload coverage reports to Codecov"),
     params =
       Map("token" -> "${{ secrets.CODECOV_TOKEN }}", "slug" -> "YacineAll/json-schema-inferrer")))
-ThisBuild / githubWorkflowBuildPostamble := Seq(
-  WorkflowStep.Sbt(
-    commands = List("publish"),
-    name = Some("Publish snapshot or release"),
-    env = Map(
-      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}",
-      "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}"),
-    cond = Some("github.ref != 'refs/heads/main'")))
+
 ThisBuild / githubWorkflowPublish := Seq(
-  WorkflowStep.Sbt(
-    commands = List("ci-release"),
-    name = Some("Publish PR-release"),
-    env = Map(
-      "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
-      "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
-      "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
-      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"),
-    cond = Some("github.event_name == 'pull_request' && github.ref == 'refs/heads/develop'")),
   WorkflowStep.Sbt(
     commands = List("ci-release"),
     name = Some("Publish release"),
@@ -83,8 +69,7 @@ ThisBuild / githubWorkflowPublish := Seq(
       "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
       "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
       "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
-      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"),
-    cond = Some("github.event_name == 'push' && github.ref_type == 'tag'")))
+      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}")))
 
 //publishTo := sonatypePublishToBundle.value
 sonatypeCredentialHost := "s01.oss.sonatype.org"
