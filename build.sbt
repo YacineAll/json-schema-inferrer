@@ -44,8 +44,8 @@ ThisBuild / githubWorkflowJavaVersions := Seq(
   JavaSpec.temurin("11"),
   JavaSpec.temurin("17"),
   JavaSpec.temurin("20"))
-ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.Equals(Ref.Branch("main")))
-ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
+
+ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("v")))
 
 ThisBuild / githubWorkflowBuildPostamble ++= Seq(
   WorkflowStep.Sbt(
@@ -58,15 +58,15 @@ ThisBuild / githubWorkflowBuildPostamble ++= Seq(
     name = Some("Upload coverage reports to Codecov"),
     params =
       Map("token" -> "${{ secrets.CODECOV_TOKEN }}", "slug" -> "YacineAll/json-schema-inferrer")))
-
-ThisBuild / githubWorkflowPublish := Seq(
+ThisBuild / githubWorkflowBuildPostamble := Seq(
   WorkflowStep.Sbt(
     commands = List("publish"),
     name = Some("Publish snapshot or release"),
     env = Map(
       "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}",
       "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}"),
-    cond = Some("github.ref != 'refs/heads/main'")),
+    cond = Some("github.ref != 'refs/heads/main'")))
+ThisBuild / githubWorkflowPublish := Seq(
   WorkflowStep.Sbt(
     commands = List("ci-release"),
     name = Some("Publish PR-release"),
