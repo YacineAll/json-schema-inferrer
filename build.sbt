@@ -1,4 +1,4 @@
-ThisBuild / version := "0.0.2-rc1"
+ThisBuild / version := "0.0.2-SNAPSHOT"
 ThisBuild / scalaVersion := "3.4.1"
 ThisBuild / organization := "io.github.yacineall"
 ThisBuild / organizationName := "yacineAll"
@@ -61,8 +61,24 @@ ThisBuild / githubWorkflowBuildPostamble ++= Seq(
     name = Some("Upload coverage reports to Codecov"),
     params =
       Map("token" -> "${{ secrets.CODECOV_TOKEN }}", "slug" -> "YacineAll/json-schema-inferrer")))
-
+ThisBuild / githubWorkflowBuildPostamble := Seq(
+  WorkflowStep.Sbt(
+    commands = List("publish"),
+    name = Some("Publish snapshot or release"),
+    env = Map(
+      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}",
+      "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}"),
+    cond = Some("github.ref != 'refs/heads/main'")))
 ThisBuild / githubWorkflowPublish := Seq(
+  WorkflowStep.Sbt(
+    commands = List("ci-release"),
+    name = Some("Publish PR-release"),
+    env = Map(
+      "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+      "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+      "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
+      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"),
+    cond = Some("github.event_name == 'pull_request' && github.ref == 'refs/heads/develop'")),
   WorkflowStep.Sbt(
     commands = List("ci-release"),
     name = Some("Publish release"),
@@ -70,7 +86,8 @@ ThisBuild / githubWorkflowPublish := Seq(
       "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
       "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
       "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
-      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}")))
+      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"),
+    cond = Some("github.event_name == 'push' && github.ref_type == 'tag'")))
 
 //publishTo := sonatypePublishToBundle.value
 sonatypeCredentialHost := "s01.oss.sonatype.org"

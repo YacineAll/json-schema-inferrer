@@ -62,20 +62,12 @@ jobs:
       - name: Build project
         run: sbt '++ ${{ matrix.scala }}' test
 
-      - name: Formatting
-        run: 'sbt ''++ ${{ matrix.scala }}'' ''${{ matrix.ci }}'' scalafmtSbtCheck scalafmtCheck test:scalafmtCheck'
-
-      - name: Build tests
-        run: sbt '++ ${{ matrix.scala }}' '${{ matrix.ci }}' coverage test
-
-      - name: Coverage Report
-        run: sbt '++ ${{ matrix.scala }}' '${{ matrix.ci }}' coverageReport
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: YacineAll/json-schema-inferrer
+      - name: Publish snapshot or release
+        if: github.ref != 'refs/heads/main'
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+        run: sbt '++ ${{ matrix.scala }}' publish
 
       - name: Compress target directories
         run: tar cf targets.tar target project/target
@@ -136,7 +128,17 @@ jobs:
           tar xf targets.tar
           rm targets.tar
 
+      - name: Publish PR-release
+        if: github.event_name == 'pull_request' && github.ref == 'refs/heads/develop'
+        env:
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+        run: sbt ci-release
+
       - name: Publish release
+        if: github.event_name == 'push' && github.ref_type == 'tag'
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
           PGP_SECRET: ${{ secrets.PGP_SECRET }}
