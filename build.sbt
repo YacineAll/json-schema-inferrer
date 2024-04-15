@@ -40,10 +40,7 @@ lazy val root = (project in file("."))
     Test / parallelExecution := false // Disable parallel execution for testing
   )
 
-ThisBuild / githubWorkflowJavaVersions := Seq(
-  JavaSpec.temurin("11"),
-  JavaSpec.temurin("17"),
-  JavaSpec.temurin("20"))
+ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17"))
 
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches := Seq(
@@ -63,12 +60,13 @@ ThisBuild / githubWorkflowBuildPostamble ++= Seq(
       Map("token" -> "${{ secrets.CODECOV_TOKEN }}", "slug" -> "YacineAll/json-schema-inferrer")))
 ThisBuild / githubWorkflowBuildPostamble := Seq(
   WorkflowStep.Sbt(
-    commands = List("publish"),
+    commands = List("publishSigned"),
     name = Some("Publish snapshot or release"),
     env = Map(
       "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}",
       "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}"),
     cond = Some("github.ref != 'refs/heads/main'")))
+
 ThisBuild / githubWorkflowPublish := Seq(
   WorkflowStep.Sbt(
     commands = List("ci-release"),
