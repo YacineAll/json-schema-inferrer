@@ -1,0 +1,62 @@
+name: Build and Test
+
+on:
+  pull_request:
+    branches: ['**']
+  push:
+    branches: ['**']
+    tags: [v*]
+
+env:
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  CODECOV_SLUG: YacineAll/json-schema-inferrer
+
+jobs:
+  build:
+    name: Build and Test
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        scala: [3.4.1]
+        java: [temurin@17]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout current branch (full)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java (temurin@17)
+        if: matrix.java == 'temurin@17'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: sbt
+
+      - name: Formatting
+        run: sbt '++ ${{ matrix.scala }}' scalafmtSbtCheck scalafmtCheck test:scalafmtCheck
+
+      - name: Build project
+        run: sbt '++ ${{ matrix.scala }}' test
+
+      - name: Build and test
+        run: sbt '++ ${{ matrix.scala }}' coverage test
+
+      - name: Coverage Report
+        run: sbt '++ ${{ matrix.scala }}' coverageReport
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ env.CODECOV_TOKEN }}
+          slug: ${{ env.CODECOV_SLUG }}
+
+      - name: Compress target directories
+        run: tar cf targets.tar target project/target
+
+      - name: Upload target directories
+        uses: actions/upload-artifact@v4
+        with:
+          name: target-${{ matrix.os }}-${{ matrix.scala }}-${{ matrix.java }}
+          path: targets.tar
