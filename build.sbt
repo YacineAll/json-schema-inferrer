@@ -1,5 +1,5 @@
 ThisBuild / scalaVersion := "3.4.1"
-ThisBuild / organization := ""
+
 
 inThisBuild(
   List(
