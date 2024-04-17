@@ -1,6 +1,5 @@
 ThisBuild / scalaVersion := "3.4.1"
 
-
 inThisBuild(
   List(
     organization := "io.github.yacineall",

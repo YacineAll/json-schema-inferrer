@@ -8,7 +8,8 @@ on:
     tags: [v*]
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  CODECOV_SLUG: YacineAll/json-schema-inferrer
 
 jobs:
   build:
