@@ -13,7 +13,7 @@ inThisBuild(
         email = "yacine.allouache.dev@gmail.com",
         url = url("https://github.com/YacineAll")))))
 sonatypeCredentialHost := "s01.oss.sonatype.org"
-sonatypeRepository := "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
+sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 resolvers += "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 
 lazy val root = (project in file("."))
