@@ -28,3 +28,35 @@ lazy val root = (project in file("."))
     testFrameworks += new TestFramework("org.scalatestplus.junit.JUnitRunner"),
     testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
     Test / parallelExecution := true)
+
+ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17"))
+
+ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
+ThisBuild / githubWorkflowPublishTargetBranches :=
+  Seq(RefPredicate.StartsWith(Ref.Tag("v")), RefPredicate.Equals(Ref.Branch("main")))
+
+ThisBuild / githubWorkflowPublish := Seq(
+  WorkflowStep.Sbt(commands = List("ci-release"), name = Some("Publish project")))
+
+ThisBuild / githubWorkflowPublish := Seq(
+  WorkflowStep.Sbt(
+    commands = List("ci-release"),
+    name = Some("Publish project"),
+    env = Map(
+      "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+      "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+      "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
+      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}")))
+
+ThisBuild / githubWorkflowBuildPostamble ++= Seq(
+  WorkflowStep.Sbt(
+    name = Some("Formatting"),
+    commands = List("scalafmtSbtCheck", "scalafmtCheck", "test:scalafmtCheck")),
+  WorkflowStep.Sbt(
+    commands = List("test", "coverage test", "coverageReport"),
+    name = Some("Coverage Report")),
+  WorkflowStep.Use(
+    ref = UseRef.Public("codecov", "codecov-action", "v4.0.1"),
+    name = Some("Upload coverage reports to Codecov"),
+    params =
+      Map("token" -> "${{ secrets.CODECOV_TOKEN }}", "slug" -> "YacineAll/json-schema-inferrer")))
