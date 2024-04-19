@@ -37,14 +37,8 @@ jobs:
       - name: Formatting
         run: sbt '++ ${{ matrix.scala }}' scalafmtSbtCheck scalafmtCheck test:scalafmtCheck
 
-      - name: Build project
-        run: sbt '++ ${{ matrix.scala }}' test
-
-      - name: Build and test
-        run: sbt '++ ${{ matrix.scala }}' coverage test
-
       - name: Coverage Report
-        run: sbt '++ ${{ matrix.scala }}' coverageReport
+        run: sbt '++ ${{ matrix.scala }}' test coverage test coverageReport
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
