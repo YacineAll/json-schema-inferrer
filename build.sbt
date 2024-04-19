@@ -52,7 +52,9 @@ ThisBuild / githubWorkflowBuildPostamble ++= Seq(
   WorkflowStep.Sbt(
     name = Some("Formatting"),
     commands = List("scalafmtSbtCheck", "scalafmtCheck", "test:scalafmtCheck")),
-  WorkflowStep.Sbt(commands = List("coverage", "coverageReport"), name = Some("Coverage Report")),
+  WorkflowStep.Sbt(
+    commands = List("coverage", "test", "coverageReport"),
+    name = Some("Coverage Report")),
   WorkflowStep.Use(
     ref = UseRef.Public("codecov", "codecov-action", "v4.0.1"),
     name = Some("Upload coverage reports to Codecov"),
