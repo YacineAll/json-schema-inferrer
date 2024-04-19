@@ -72,10 +72,5 @@ ThisBuild / githubWorkflowAddedJobs += WorkflowJob(
       env =
         Map("GITHUB_TOKEN" -> "${{ secrets.GITHUB_TOKEN }}", "tag" -> "${{ github.ref_name }}"),
       commands = List(
-        "gh",
-        "release",
-        "create",
-        "\"$tag\"",
-        "--repo=\"$GITHUB_REPOSITORY\"",
-        "--title=\"${GITHUB_REPOSITORY#*/} ${tag#v}\"",
-        "--generate-notes"))))
+        "gh release create \"$tag\" --repo=\"$GITHUB_REPOSITORY\" --title=\"${GITHUB_REPOSITORY#*/} ${tag#v}\" --generate-notes"))))
+
