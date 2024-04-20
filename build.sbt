@@ -55,8 +55,9 @@ ThisBuild / githubWorkflowBuildPostamble ++= Seq(
   WorkflowStep.Sbt(
     name = Some("Formatting"),
     commands = List("scalafmtSbtCheck", "scalafmtCheck", "test:scalafmtCheck")),
-  WorkflowStep.Sbt(
-    commands = List("coverage", "test", "coverageReport"),
+  WorkflowStep.Run(
+    commands = List("sbt", "coverage", "test", "coverageReport"),
+    cond = Some("${{ contains(matrix.scala, '2.12.19') || contains(matrix.scala, '3.4.1') }}"),
     name = Some("Coverage Report")),
   WorkflowStep.Use(
     ref = UseRef.Public("codecov", "codecov-action", "v4.0.1"),
