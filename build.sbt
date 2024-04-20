@@ -60,16 +60,3 @@ ThisBuild / githubWorkflowBuildPostamble ++= Seq(
     name = Some("Upload coverage reports to Codecov"),
     params =
       Map("token" -> "${{ secrets.CODECOV_TOKEN }}", "slug" -> "YacineAll/json-schema-inferrer")))
-ThisBuild / githubWorkflowAddedJobs += WorkflowJob(
-  id = "post-publish",
-  name = "post publish",
-  cond = Some(
-    "${{ success() && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}"),
-  needs = List("publish"),
-  steps = List(
-    WorkflowStep.Run(
-      name = Some("Create release"),
-      env =
-        Map("GITHUB_TOKEN" -> "${{ secrets.GITHUB_TOKEN }}", "tag" -> "${{ github.ref_name }}"),
-      commands = List(
-        "gh release create \"$tag\" --repo=\"$GITHUB_REPOSITORY\" --title=\"${GITHUB_REPOSITORY#*/} ${tag#v}\" --generate-notes"))))
