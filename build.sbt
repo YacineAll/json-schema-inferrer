@@ -55,12 +55,13 @@ ThisBuild / githubWorkflowBuildPostamble ++= Seq(
   WorkflowStep.Sbt(
     name = Some("Formatting"),
     commands = List("scalafmtSbtCheck", "scalafmtCheck", "test:scalafmtCheck")),
-  WorkflowStep.Run(
-    commands = List("sbt", "coverage", "test", "coverageReport"),
+  WorkflowStep.Sbt(
     cond = Some("${{ contains(matrix.scala, '2.12.19') || contains(matrix.scala, '3.4.1') }}"),
+    commands = List("coverage", "test", "coverageReport"),
     name = Some("Coverage Report")),
   WorkflowStep.Use(
     ref = UseRef.Public("codecov", "codecov-action", "v4.0.1"),
+    cond = Some("${{ contains(matrix.scala, '2.12.19') || contains(matrix.scala, '3.4.1') }}"),
     name = Some("Upload coverage reports to Codecov"),
     params =
       Map("token" -> "${{ secrets.CODECOV_TOKEN }}", "slug" -> "YacineAll/json-schema-inferrer")))

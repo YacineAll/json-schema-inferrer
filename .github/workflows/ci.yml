@@ -67,13 +67,10 @@ jobs:
 
       - name: Coverage Report
         if: ${{ contains(matrix.scala, '2.12.19') || contains(matrix.scala, '3.4.1') }}
-        run: |
-          sbt
-          coverage
-          test
-          coverageReport
+        run: sbt '++ ${{ matrix.scala }}' coverage test coverageReport
 
       - name: Upload coverage reports to Codecov
+        if: ${{ contains(matrix.scala, '2.12.19') || contains(matrix.scala, '3.4.1') }}
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
