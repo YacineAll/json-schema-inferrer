@@ -1,6 +1,6 @@
 package org.jsonschematools.merging
 
-import org.json4s.*
+import org.json4s._
 
 import scala.annotation.tailrec
 
@@ -10,7 +10,7 @@ object MMerge {
    * A type alias for the basic JSON data types: JString, JInt, JDouble, and JBool. This alias
    * represents the atomic JSON values that cannot be further decomposed.
    */
-  private type Atomic = JString | JInt | JDouble | JBool
+  private type Atomic = Either[JString, Either[JInt, Either[JDouble, JBool]]]
 
   /**
    * This function takes two JSON values as input and returns a merged JSON value. It uses pattern
@@ -28,13 +28,20 @@ object MMerge {
     case (JArray(xs), JArray(ys)) => JArray(mergeVals(xs, ys))
     case (JObject(xs), JArray(ys)) => JArray(List(JObject(xs)) ++ ys)
     case (JArray(xs), JObject(ys)) => JArray(xs ++ List(JObject(ys)))
-    case (JObject(xs), singleValue: Atomic) => JArray(List(JObject(xs)) ++ List(singleValue))
-    case (singleValue: Atomic, JObject(xs)) => JArray(List(singleValue) ++ List(JObject(xs)))
+    case (JObject(xs), singleValue @ (_: JString | _: JInt | _: JDouble | _: JBool)) =>
+      JArray(List(JObject(xs)) ++ List(singleValue))
+    case (singleValue @ (_: JString | _: JInt | _: JDouble | _: JBool), JObject(xs)) =>
+      JArray(List(singleValue) ++ List(JObject(xs)))
     case (JNothing, x) => x
     case (x, JNothing) => x
-    case (JArray(xs), singleValue: Atomic) => JArray(xs :+ singleValue)
-    case (singleValue: Atomic, JArray(xs)) => JArray(singleValue +: xs)
-    case (a: Atomic, b: Atomic) => if (a == b) a else JArray(List(a, b))
+    case (JArray(xs), singleValue @ (_: JString | _: JInt | _: JDouble | _: JBool)) =>
+      JArray(xs :+ singleValue)
+    case (singleValue @ (_: JString | _: JInt | _: JDouble | _: JBool), JArray(xs)) =>
+      JArray(singleValue +: xs)
+    case (
+          a @ (_: JString | _: JInt | _: JDouble | _: JBool),
+          b @ (_: JString | _: JInt | _: JDouble | _: JBool)) =>
+      if (a == b) a else JArray(List(a, b))
     case (_, y) => y
   }
 
@@ -50,7 +57,7 @@ object MMerge {
    * @return
    *   the new JSON array containing both the list elements and the atomic value
    */
-  private def mergeWithArray(array: List[JValue], singleValue: Atomic): JArray = JArray(
+  private def mergeWithArray(array: List[JValue], singleValue: JValue): JArray = JArray(
     array :+ singleValue)
 
   /**

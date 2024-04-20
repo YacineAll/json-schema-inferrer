@@ -1,9 +1,9 @@
 package org.jsonschematools.merging
 
-import org.json4s.*
+import org.json4s._
 import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.matchers.should.Matchers.*
-import org.json4s.native.JsonMethods.*
+import org.scalatest.matchers.should.Matchers._
+import org.json4s.native.JsonMethods._
 
 import scala.io.Source
 
