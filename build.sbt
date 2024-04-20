@@ -1,5 +1,3 @@
-ThisBuild / scalaVersion := "3.4.1"
-
 inThisBuild(
   List(
     organization := "io.github.yacineall",
@@ -20,8 +18,8 @@ lazy val root = (project in file("."))
   .settings(
     name := "json-schema-inferrer",
     libraryDependencies ++= Seq(
-      "org.json4s" %% "json4s-jackson" % "4.1.0-M5",
-      "org.json4s" %% "json4s-native" % "4.1.0-M5",
+      "org.json4s" %% "json4s-jackson" % "4.0.6",
+      "org.json4s" %% "json4s-native" % "4.0.6",
       // Testing dependencies
       "org.scalatest" %% "scalatest" % "3.2.17" % Test),
     // ScalaTest configuration
@@ -29,7 +27,12 @@ lazy val root = (project in file("."))
     testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
     Test / parallelExecution := true)
 
-ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17"))
+ThisBuild / crossScalaVersions := List("2.11.12", "2.12.19", "3.4.1")
+
+ThisBuild / githubWorkflowJavaVersions := Seq(
+  JavaSpec.temurin("8"),
+  JavaSpec.temurin("11"),
+  JavaSpec.temurin("17"))
 
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches :=

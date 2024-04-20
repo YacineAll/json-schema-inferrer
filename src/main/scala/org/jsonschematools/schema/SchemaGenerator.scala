@@ -1,7 +1,7 @@
 package org.jsonschematools.schema
 
-import org.json4s.*
-import org.json4s.jackson.JsonMethods.*
+import org.json4s._
+import org.json4s.jackson.JsonMethods._
 import org.jsonschematools.schema.types.{ArrayType, JsonSchemaType, ObjectType}
 
 /** Object responsible for generating JSON schema from a JSON string. */

@@ -1,7 +1,6 @@
 package org.jsonschematools.schema.types
 
-import org.json4s.{JArray, JBool, JDecimal, JInt, JLong, JNothing, JNull, JNumber, JObject, JSet, JString, JValue}
-import org.jsonschematools.schema.*
+import org.json4s.{JArray, JBool, JDecimal, JDouble, JInt, JLong, JNothing, JNull, JObject, JSet, JString, JValue}
 
 /**
  * An abstract class representing a JSON Schema type.
@@ -58,7 +57,7 @@ object JsonSchemaType extends JsonSchemaType {
    *   the corresponding JSON Schema type
    */
   def getSchemaTypeFor(element: JValue): JsonSchemaType =
-    element match
+    element match {
       case JSet(set) => ArrayType
       case JObject(obj) => ObjectType
       case JNull => NullType
@@ -66,9 +65,9 @@ object JsonSchemaType extends JsonSchemaType {
       case JInt(num) => NumberType
       case JArray(arr) => ArrayType
       case JDecimal(num) => NumberType
+      case JDouble(num) => NumberType
       case JBool(value) => BooleanType
-      case number: JNumber => NumberType
       case JNothing => NullType
       case JString(s) => StringType
-
+    }
 }
